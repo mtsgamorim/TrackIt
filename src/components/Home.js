@@ -3,13 +3,15 @@ import styled from "styled-components"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-
 import logo from "../assents/logo.png"
 
 export default function Home(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [token, setToken] = useState("");
+
+    //LOGIN: EMAIL PESSOAL  SENHA: TESTE
+    
     const navigate = useNavigate();
     function fazerLogin(event) {
         event.preventDefault();
@@ -20,7 +22,7 @@ export default function Home(){
         });
         promise.then((res) => {
             setToken(res.data.token);
-            navigate("/hoje", {state:{token:token}});
+            navigate("/hoje",{state:{token:token}});
         })
 
         promise.catch((err) => {
