@@ -2,13 +2,16 @@ import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 import logo from "../assents/logo.png"
 
 export default function Home(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [token, setToken] = useState("");
+    const { usuario, setUsuario } = useContext(UserContext);
+    console.log(usuario)
 
     //LOGIN: EMAIL PESSOAL  SENHA: TESTE
     
@@ -21,8 +24,9 @@ export default function Home(){
             password: senha
         });
         promise.then((res) => {
-            setToken(res.data.token);
-            navigate("/hoje",{state:{token:token}});
+            setUsuario(res.data);
+            console.log(usuario)
+            navigate("/hoje");
         })
 
         promise.catch((err) => {

@@ -11,7 +11,9 @@ export default function Cadastro(){
     const [senha, setSenha] = useState("");
     const [nome, setNome] = useState("");
     const [foto, setFoto] = useState("");
+    
     const navigate = useNavigate();
+    
 
     function fazerCadastro(event){
         event.preventDefault();
