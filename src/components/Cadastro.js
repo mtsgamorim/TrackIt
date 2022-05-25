@@ -2,25 +2,26 @@ import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { ThreeDots } from  'react-loader-spinner'
+import { ThreeDots } from 'react-loader-spinner'
 
 import logo from "../assents/logo.png"
 
 
-export default function Cadastro(){
+export default function Cadastro() {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [nome, setNome] = useState("");
     const [foto, setFoto] = useState("");
     const [animation, setAnimation] = useState(false);
-    
-    const navigate = useNavigate();
-    
 
-    function fazerCadastro(event){
+
+    const navigate = useNavigate();
+
+
+    function fazerCadastro(event) {
         setAnimation(true);
         event.preventDefault();
-        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up" , {
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", {
             email: email,
             name: nome,
             image: foto,
@@ -34,15 +35,66 @@ export default function Cadastro(){
             setAnimation(false);
         })
     }
-    return(
+    return (
         <Container>
-            <img src={logo} alt="TrackIt"/>
+            <img src={logo} alt="TrackIt" />
             <form onSubmit={fazerCadastro}>
-                <input placeholder="email" type="email" value={email} required onChange={e => setEmail(e.target.value)}/>
-                <input placeholder="senha" type="password" value={senha} required onChange={e => setSenha(e.target.value)}/>
-                <input placeholder="nome" type="text" value={nome} required onChange={e => setNome(e.target.value)}/>
-                <input placeholder="foto" type="url" value={foto} required onChange={e => setFoto(e.target.value)}/>
-                <button type="submit">{animation ? <ThreeDots color="#00BFFF" height={80} width={80} /> : <span>Cadastrar</span>}</button>
+                {animation ? <input
+                    placeholder="email"
+                    type="email" value={email}
+                    required
+                    disabled
+                    onChange={e => setEmail(e.target.value)}
+                /> : <input
+                    placeholder="email"
+                    type="email" value={email}
+                    required
+                    onChange={e => setEmail(e.target.value)}
+                />}
+                {animation ? <input
+                    placeholder="senha"
+                    type="password"
+                    value={senha}
+                    required
+                    disabled
+                    onChange={e => setSenha(e.target.value)}
+                /> : <input
+                    placeholder="senha"
+                    type="password"
+                    value={senha}
+                    required
+                    onChange={e => setSenha(e.target.value)}
+                />}
+                {animation ? <input
+                    placeholder="nome"
+                    type="text"
+                    value={nome}
+                    required
+                    disabled
+                    onChange={e => setNome(e.target.value)}
+                /> : <input
+                    placeholder="nome"
+                    type="text"
+                    value={nome}
+                    required
+                    onChange={e => setNome(e.target.value)}
+                />}
+                {animation ? <input
+                    placeholder="nome"
+                    type="url"
+                    value={foto}
+                    required
+                    disabled
+                    onChange={e => setFoto(e.target.value)}
+                /> : <input
+                    placeholder="foto"
+                    type="url"
+                    value={foto}
+                    required
+                    onChange={e => setFoto(e.target.value)}
+                />}
+                {animation ? <Desativa><ThreeDots color="#00BFFF" height={80} width={80} /></Desativa> : <button type="submit"><span>Cadastrar</span></button>}
+                
             </form>
             <Link to="/">
                 <p>Já tem uma conta? Faça login!</p>
@@ -94,6 +146,7 @@ const Container = styled.div`
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity:1;
             span {
                 font-family: 'Lexend Deca';
                 font-weight: 400;
@@ -102,4 +155,15 @@ const Container = styled.div`
             }
         }
     }
+`;
+
+const Desativa = styled.div`
+    height: 45px;
+    background-color: #52B6FF;
+    border-radius: 4.63636px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity:0.7;
 `;

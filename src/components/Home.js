@@ -13,8 +13,7 @@ export default function Home(){
     const [senha, setSenha] = useState("");
     const { usuario, setUsuario } = useContext(UserContext);
     const [animation, setAnimation] = useState(false);
-    console.log(usuario)
-
+    
     //LOGIN: EMAIL PESSOAL  SENHA: TESTE
     
     const navigate = useNavigate();
@@ -43,9 +42,34 @@ export default function Home(){
         <Container>
             <img src={logo} alt="TrackIt"/>
             <form onSubmit={fazerLogin}>
-                <input placeholder="email" type="email" value={email} required onChange={e => setEmail(e.target.value)}/>
-                <input placeholder="senha" type="password" value={senha} required onChange={e => setSenha(e.target.value)}/>
-                <button type="submit">{animation ? <ThreeDots color="#00BFFF" height={80} width={80} /> : <span>Entrar</span>}</button>
+                {animation ? <input 
+                placeholder="email" 
+                type="email" value={email} 
+                required 
+                disabled
+                onChange={e => setEmail(e.target.value)}
+                /> : <input 
+                placeholder="email" 
+                type="email" value={email} 
+                required 
+                onChange={e => setEmail(e.target.value)}
+                />}
+                {animation ? <input 
+                placeholder="senha" 
+                type="password" 
+                value={senha} 
+                required 
+                disabled
+                onChange={e => setSenha(e.target.value)}
+                /> : <input 
+                placeholder="senha" 
+                type="password" 
+                value={senha} 
+                required
+                onChange={e => setSenha(e.target.value)}
+                />}
+                
+                {animation ? <Desativa><ThreeDots color="#00BFFF" height={80} width={80} /></Desativa> : <button type="submit"><span>Entrar</span></button>}
             </form>
             <Link to="/cadastro">
                 <p>Não tem uma conta? Cadastre-se!</p>
@@ -105,4 +129,15 @@ const Container = styled.div`
             }
         }
     }
+`;
+
+const Desativa = styled.div`
+    height: 45px;
+    background-color: #52B6FF;
+    border-radius: 4.63636px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity:0.7;
 `;
