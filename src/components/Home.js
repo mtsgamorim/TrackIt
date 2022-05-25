@@ -27,7 +27,6 @@ export default function Home(){
         });
         promise.then((res) => {
             setUsuario(res.data);
-            console.log(usuario)
             navigate("/hoje");
         })
 

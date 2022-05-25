@@ -1,5 +1,10 @@
+import Topo from "./Topo"
+import Menu from "./Menu"
 export default function Hoje(){
     return(
-        <h1>Eu sou o HOje</h1>
+        <>
+            <Topo />
+            <Menu />
+        </>
     )
 }
