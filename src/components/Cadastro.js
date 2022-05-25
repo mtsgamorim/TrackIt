@@ -2,6 +2,7 @@ import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { ThreeDots } from  'react-loader-spinner'
 
 import logo from "../assents/logo.png"
 
@@ -11,11 +12,13 @@ export default function Cadastro(){
     const [senha, setSenha] = useState("");
     const [nome, setNome] = useState("");
     const [foto, setFoto] = useState("");
+    const [animation, setAnimation] = useState(false);
     
     const navigate = useNavigate();
     
 
     function fazerCadastro(event){
+        setAnimation(true);
         event.preventDefault();
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up" , {
             email: email,
@@ -25,11 +28,10 @@ export default function Cadastro(){
         })
         promise.then(res => {
             navigate("/");
-            // FALTA ANIMAÇÃO
         })
         promise.catch(err => {
             alert("Problema na criação");
-            // FALTA ANIMAÇÃO
+            setAnimation(false);
         })
     }
     return(
@@ -40,9 +42,9 @@ export default function Cadastro(){
                 <input placeholder="senha" type="password" value={senha} required onChange={e => setSenha(e.target.value)}/>
                 <input placeholder="nome" type="text" value={nome} required onChange={e => setNome(e.target.value)}/>
                 <input placeholder="foto" type="url" value={foto} required onChange={e => setFoto(e.target.value)}/>
-                <button type="submit"><span>Cadastrar</span></button>
+                <button type="submit">{animation ? <ThreeDots color="#00BFFF" height={80} width={80} /> : <span>Cadastrar</span>}</button>
             </form>
-            <Link to="/cadastro">
+            <Link to="/">
                 <p>Já tem uma conta? Faça login!</p>
             </Link>
         </Container>

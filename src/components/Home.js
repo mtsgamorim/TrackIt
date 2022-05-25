@@ -2,8 +2,9 @@ import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useContext } from "react";
-import UserContext from "../contexts/UserContext";
+import { useContext } from "react"
+import UserContext from "../contexts/UserContext"
+import { ThreeDots } from  'react-loader-spinner'
 
 import logo from "../assents/logo.png"
 
@@ -11,12 +12,14 @@ export default function Home(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const { usuario, setUsuario } = useContext(UserContext);
+    const [animation, setAnimation] = useState(false);
     console.log(usuario)
 
     //LOGIN: EMAIL PESSOAL  SENHA: TESTE
     
     const navigate = useNavigate();
     function fazerLogin(event) {
+        setAnimation(true);
         event.preventDefault();
 
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
@@ -31,6 +34,7 @@ export default function Home(){
 
         promise.catch((err) => {
             alert("Falha");
+            setAnimation(false);
         })
     }
         
@@ -41,7 +45,7 @@ export default function Home(){
             <form onSubmit={fazerLogin}>
                 <input placeholder="email" type="email" value={email} required onChange={e => setEmail(e.target.value)}/>
                 <input placeholder="senha" type="password" value={senha} required onChange={e => setSenha(e.target.value)}/>
-                <button type="submit"><span>Entrar</span></button>
+                <button type="submit">{animation ? <ThreeDots color="#00BFFF" height={80} width={80} /> : <span>Entrar</span>}</button>
             </form>
             <Link to="/cadastro">
                 <p>Não tem uma conta? Cadastre-se!</p>
