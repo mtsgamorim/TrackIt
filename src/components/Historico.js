@@ -26,12 +26,14 @@ const Container = styled.div`
         font-size: 23px;
         margin-left: 20px;
         margin-top: 100px;
+        margin-bottom: 10px;
     }
     p {
         font-family: 'Lexend Deca';
         font-weight: 400;
         font-size: 18px;
         margin-left: 20px;
+        color: #666666;
     }
 `;
 

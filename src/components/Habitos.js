@@ -3,24 +3,42 @@ import axios from "axios"
 
 import Topo from "./Topo"
 import Menu from "./Menu"
+import { useState } from "react"
 
 export default function Habitos(){
+
+    const [habitos, setHabitos] = useState([]);
+
     return(
-    <Tela>
-        <Container>
+        <Tela>
             <Topo />
-
-
+            <ContainerTopo>
+                <h1>Meus hábitos</h1>
+                <Botao>
+                    <ion-icon name="add-outline"></ion-icon>
+                </Botao>
+            </ContainerTopo>
+            <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
             <Menu />
-        </Container>
-    </Tela>
+        </Tela>
     )
 }
 
 
-const Container = styled.div`
-    background-color: #E5E5E5;
-    height: 100vh;
+const ContainerTopo = styled.div`
+   margin-top: 70px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   h1 {
+        color:#126BA5;
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 23px;
+        margin-left: 20px;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
 `;
 
 const Tela = styled.div`
@@ -29,4 +47,30 @@ const Tela = styled.div`
     height: 100vh;
     display: flex;
     flex-direction: column;
+    h3 {
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 18px;
+        margin-left: 20px;
+        margin-top: 20px;
+        color: #666666;
+    }
+`;
+
+const Botao = styled.div`
+    width: 40px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: #52B6FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    margin-top: 15px;
+    ion-icon {
+        background-color: #52B6FF;
+        color: #FFFFFF;
+        width: 30px;
+        height: 25px;
+    }
 `;
