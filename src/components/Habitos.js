@@ -5,10 +5,23 @@ import Topo from "./Topo"
 import Menu from "./Menu"
 import { useState } from "react"
 
+function RenderizarHabitos({habitos}){
+    if(habitos.length === 0){
+        return (
+            <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
+        )
+    }else {
+        return(
+            <h3>Oiii</h3>
+        )
+        
+    }
+}
+
 export default function Habitos(){
 
     const [habitos, setHabitos] = useState([]);
-
+    
     return(
         <Tela>
             <Topo />
@@ -18,7 +31,7 @@ export default function Habitos(){
                     <ion-icon name="add-outline"></ion-icon>
                 </Botao>
             </ContainerTopo>
-            <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
+            <RenderizarHabitos habitos={habitos}/>
             <Menu />
         </Tela>
     )
