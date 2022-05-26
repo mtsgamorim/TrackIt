@@ -1,9 +1,11 @@
 import styled from "styled-components"
 import axios from "axios"
+import { useState, useContext, useEffect } from "react"
+import UserContext from "../contexts/UserContext"
 
 import Topo from "./Topo"
 import Menu from "./Menu"
-import { useState } from "react"
+
 
 function RenderizarHabitos({habitos}){
     if(habitos.length === 0){
@@ -21,6 +23,20 @@ function RenderizarHabitos({habitos}){
 export default function Habitos(){
 
     const [habitos, setHabitos] = useState([]);
+    const { usuario, setUsuario } = useContext(UserContext);
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
+        }
+    }
+
+    useEffect(()=> {
+        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
+        promise.then(resposta => {
+            setHabitos(resposta.data);
+        })
+    }, []);
+
     
     return(
         <Tela>
