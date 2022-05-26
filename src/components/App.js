@@ -7,6 +7,8 @@ import Habitos from "./Habitos"
 import Hoje from "./Hoje"
 import Historico from "./Historico"
 
+
+
 export default function App() {
     const [usuario, setUsuario] = useState({});
     const contextValue = { usuario, setUsuario };

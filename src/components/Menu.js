@@ -21,7 +21,7 @@ export default function Menu() {
                     styles={buildStyles({
                     backgroundColor: "#3e98c7",
                     pathColor: "#fff",
-                    trailColor: "transparent"
+                    trailColor: "transparent",
                     })}
                 />
                 <p>Hoje</p>
@@ -36,13 +36,16 @@ export default function Menu() {
 
 const Container = styled.div`
     width: 100%;
-    height: 70;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-around;
     position: fixed;
     bottom: 0;
     left: 0; 
+    opacity: 1;
+    z-index: 1;
+    background-color: white;
     span {
         font-family: 'Lexend Deca';
         font-weight: 400;
@@ -59,16 +62,16 @@ const Botao = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 5px;
-    .CircularProgressbar {
-        position: relative;
-    }
+    margin-bottom: 40px;
+    z-index: 2;
+    position: relative;
     p {
         font-family: 'Lexend Deca';
         font-weight: 400;
         font-size: 18px;
         position: absolute;
         color: #FFFFFF;
+        right: 25px;  
     }
 
 `;

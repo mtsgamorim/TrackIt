@@ -4,31 +4,47 @@ import styled from "styled-components"
 
 export default function Historico(){
     return(
-        <>
-            <Topo />
+        <Tela>
             <Container>
+                <Topo />
+
                 <h1>Histórico</h1>
                 <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
+                <Menu />
             </Container>
-            <Menu />
-        </>
+        </Tela>
     )
 }
 
 const Container = styled.div`
-    width: 85%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 120px;
     h1 {
         color:#126BA5;
         font-family: 'Lexend Deca';
         font-weight: 400;
         font-size: 23px;
+        margin-left: 20px;
+        margin-top: 100px;
     }
     p {
         font-family: 'Lexend Deca';
         font-weight: 400;
         font-size: 18px;
+        margin-left: 20px;
     }
+`;
+
+const Background = styled.div`
+    background-color: #E5E5E5;
+    height: 120px;
+    
+`;
+
+const Tela = styled.div`
+    background-color: #E5E5E5;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 `;
