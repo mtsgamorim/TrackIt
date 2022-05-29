@@ -5,6 +5,7 @@ import UserContext from "../contexts/UserContext"
 
 import Topo from "./Topo"
 import Menu from "./Menu"
+import MeuHabito from "./MeuHabito"
 
 
 function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado}){
@@ -28,7 +29,7 @@ function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado}){
     )
 }
 
-function CriacaoHabito({adicionar, setAdicionar}){
+function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
     const [criarHabito, setCriarHabito] = useState("");
     const [diasSelecionado, setDiasSelecionado] = useState([]);
     const { usuario, setUsuario } = useContext(UserContext);
@@ -70,14 +71,18 @@ function CriacaoHabito({adicionar, setAdicionar}){
     ]
     function enviar(){
         setTravarInput(true);
-        console.log(criarHabito)
-        console.log(diasSelecionado);
         const envio = {
             "name": criarHabito,
             "days": diasSelecionado
         }
         const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", envio, config);
-        promise.then((res) => console.log(res.data));
+        promise.then((res) => {setTravarInput(false)
+            setAdicionar(false);
+            const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
+            promise.then(resposta => {
+            setHabitos(resposta.data);
+        })
+        });
         promise.catch((err)=> alert("Erro no envio"));
 
     }
@@ -118,14 +123,16 @@ function CriacaoHabito({adicionar, setAdicionar}){
 
 }
 
-function RenderizarHabitos({habitos}){
+function RenderizarHabitos({habitos, setHabitos}){
     if(habitos.length === 0){
         return (
             <h3>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h3>
         )
     }else {
         return(
-            <h3>Oiii</h3>
+            <>
+                {habitos.map((habito, index) => <MeuHabito key={index} habito={habito} setHabitos={setHabitos}/>)}
+            </>
         )
         
     }
@@ -159,8 +166,8 @@ export default function Habitos(){
                     <ion-icon name="add-outline"></ion-icon>
                 </Botao>
             </ContainerTopo>
-            <CriacaoHabito adicionar={adicionar} setAdicionar={setAdicionar}/>
-            <RenderizarHabitos habitos={habitos}/>
+            <CriacaoHabito adicionar={adicionar} setAdicionar={setAdicionar} setHabitos={setHabitos}/>
+            <RenderizarHabitos habitos={habitos} setHabitos={setHabitos}/>
             <Menu />
         </Tela>
     )
