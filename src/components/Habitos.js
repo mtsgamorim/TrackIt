@@ -7,6 +7,117 @@ import Topo from "./Topo"
 import Menu from "./Menu"
 
 
+function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado}){
+    const [selecionei, setSelecionei] = useState(false);
+    function marcaDia(){
+        let aux = [...diasSelecionado]
+        if(!selecionei){
+            setSelecionei(true);
+            aux.push(day);
+            setDiasSelecionado(aux);
+        }else{
+            setSelecionei(false);
+            aux = aux.filter((f) => f !== day);
+            setDiasSelecionado(aux);
+        }
+    }
+    return(
+        <SelecionarSemana onClick={marcaDia} selecionei={selecionei}>
+            <span>{name}</span>
+        </SelecionarSemana>
+    )
+}
+
+function CriacaoHabito({adicionar, setAdicionar}){
+    const [criarHabito, setCriarHabito] = useState("");
+    const [diasSelecionado, setDiasSelecionado] = useState([]);
+    const { usuario, setUsuario } = useContext(UserContext);
+    const [travarInput, setTravarInput] = useState(false);
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
+        }
+    }
+    const BotoesSemana = [
+        {
+            name: "D" ,
+            day: 0
+        },
+        {
+            name: "S" ,
+            day: 1
+        },
+        {
+            name: "T" ,
+            day: 2
+        },
+        {
+            name: "Q" ,
+            day: 3
+        },
+        {
+            name: "Q" ,
+            day: 4
+        },
+        {
+            name: "S" ,
+            day: 5
+        },
+        {
+            name: "S" ,
+            day: 6
+        }
+    ]
+    function enviar(){
+        setTravarInput(true);
+        console.log(criarHabito)
+        console.log(diasSelecionado);
+        const envio = {
+            "name": criarHabito,
+            "days": diasSelecionado
+        }
+        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", envio, config);
+        promise.then((res) => console.log(res.data));
+        promise.catch((err)=> alert("Erro no envio"));
+
+    }
+    if(adicionar){
+        return(
+            <Engloba>
+                <AreaCriar>
+                    {travarInput ? <input
+                        placeholder="nome do hábito"
+                        value={criarHabito}
+                        onChange={e => setCriarHabito(e.target.value)}
+                        disabled
+                    /> : <input
+                    placeholder="nome do hábito"
+                    value={criarHabito}
+                    onChange={e => setCriarHabito(e.target.value)}
+                />}
+                    
+                </AreaCriar>
+                <WeekButtons>
+                    {BotoesSemana.map((semana, index) => <BotaoSemana key={index} name={semana.name} day={semana.day} diasSelecionado={diasSelecionado} setDiasSelecionado={setDiasSelecionado} />)}
+                </WeekButtons>
+                <AreaSalvar>
+                <div onClick={enviar}>
+                    <span>Salvar</span>
+                </div>
+                <h4 onClick={()=>setAdicionar(false)}>Cancelar</h4>
+                </AreaSalvar>
+            </Engloba>
+        )
+    }
+    else{
+        return(
+            <>
+            </>
+        )
+    }
+
+}
+
 function RenderizarHabitos({habitos}){
     if(habitos.length === 0){
         return (
@@ -24,6 +135,7 @@ export default function Habitos(){
 
     const [habitos, setHabitos] = useState([]);
     const { usuario, setUsuario } = useContext(UserContext);
+    const [adicionar, setAdicionar]  = useState(false);
     const config = {
         headers: {
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
@@ -43,10 +155,11 @@ export default function Habitos(){
             <Topo />
             <ContainerTopo>
                 <h1>Meus hábitos</h1>
-                <Botao>
+                <Botao onClick={() => setAdicionar(true)}>
                     <ion-icon name="add-outline"></ion-icon>
                 </Botao>
             </ContainerTopo>
+            <CriacaoHabito adicionar={adicionar} setAdicionar={setAdicionar}/>
             <RenderizarHabitos habitos={habitos}/>
             <Menu />
         </Tela>
@@ -101,5 +214,91 @@ const Botao = styled.div`
         color: #FFFFFF;
         width: 30px;
         height: 25px;
+    }
+`;
+
+const WeekButtons = styled.div`
+    display: flex;
+    margin-left: 35px;
+    margin-top: 10px;
+`;
+
+const SelecionarSemana = styled.div`
+    width: 30px;
+    height: 30px;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    background-color: ${(props) => (props.selecionei ? "#CFCFCF" : "#FFFFFF")};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    span {
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 20px;
+        color: ${(props) => (props.selecionei ? "#FFFFFF" : "#DBDBDB")};
+    }
+`;
+
+const AreaCriar = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    input {
+        margin-top: 10px;
+        width: 80%;
+        height: 45px;
+        border: 1px solid #D5D5D5;
+        border-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        ::placeholder {
+                color: #DBDBDB;
+                font-family: 'Lexend Deca';
+                font-weight: 400;
+                font-size: 20px;
+            }
+    }
+`;
+
+const Engloba = styled.div`
+    background-color: #FFFFFF;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    width: 340px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 5px;
+`;
+
+const AreaSalvar = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+    h4 {
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 16px;
+        color: #52B6FF;
+        margin-right: 30px;
+        margin-top: 20px;
+    }
+    div {
+        width: 84px;
+        height: 35px;
+        background: #52B6FF;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        margin-right: 20px;
+        span {
+            color: #FFFFFF;
+            font-family: 'Lexend Deca';
+            font-weight: 400;
+            font-size: 16px;
+        }
     }
 `;
