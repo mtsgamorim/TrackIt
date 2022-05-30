@@ -4,8 +4,7 @@ import UserContext from "../contexts/UserContext"
 import logo from "../assents/TrackIt.png"
 
 export default function Topo() {
-    const { usuario, setUsuario } = useContext(UserContext);
-    console.log(usuario)
+    const { usuario } = useContext(UserContext);
     return(
         <Container>
             <img src={logo} alt="TrackIt"/>
@@ -26,6 +25,7 @@ const Container = styled.div`
     top: 0;
     left: 0;
     background-color: #126BA5;
+    z-index: 1;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
     img {
         width: 97px;

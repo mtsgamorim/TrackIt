@@ -37,11 +37,6 @@ const Container = styled.div`
     }
 `;
 
-const Background = styled.div`
-    background-color: #E5E5E5;
-    height: 120px;
-    
-`;
 
 const Tela = styled.div`
     background-color: #E5E5E5;

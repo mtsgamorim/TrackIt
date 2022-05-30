@@ -19,7 +19,7 @@ function BotaoSemana({name, day, habito}){
 
 export default function MeuHabito({habito, setHabitos}){
     const [abrirConfirmacao, setAbrirConfirmacao] = useState(false);
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { usuario } = useContext(UserContext);
    
     
     function confirma(){
@@ -108,6 +108,9 @@ const Habito = styled.div`
     border-radius: 5px;
     margin-left: 20px;
     margin-top: 5px;
+    :last-child{
+        margin-bottom: 90px;
+    }
     h1 {
         color: #666666;
         font-family: 'Lexend Deca';

@@ -11,7 +11,7 @@ import logo from "../assents/logo.png"
 export default function Home(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { setUsuario } = useContext(UserContext);
     const [animation, setAnimation] = useState(false);
     
     //LOGIN: EMAIL PESSOAL  SENHA: TESTE

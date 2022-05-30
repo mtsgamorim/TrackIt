@@ -1,5 +1,6 @@
 import styled from "styled-components"
 import axios from "axios"
+import { createGlobalStyle } from 'styled-components'
 import { useState, useContext, useEffect } from "react"
 import UserContext from "../contexts/UserContext"
 import { ThreeDots } from 'react-loader-spinner';
@@ -35,7 +36,7 @@ function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado, travarInpu
 function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
     const [criarHabito, setCriarHabito] = useState("");
     const [diasSelecionado, setDiasSelecionado] = useState([]);
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { usuario } = useContext(UserContext);
     const [travarInput, setTravarInput] = useState(false);
     const config = {
         headers: {
@@ -143,9 +144,9 @@ function RenderizarHabitos({habitos, setHabitos}){
         )
     }else {
         return(
-            <>
+            <Ultimo>
                 {habitos.map((habito, index) => <MeuHabito key={index} habito={habito} setHabitos={setHabitos}/>)}
-            </>
+            </Ultimo>
         )
         
     }
@@ -154,7 +155,7 @@ function RenderizarHabitos({habitos, setHabitos}){
 export default function Habitos(){
 
     const [habitos, setHabitos] = useState([]);
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { usuario } = useContext(UserContext);
     const [adicionar, setAdicionar]  = useState(false);
     const config = {
         headers: {
@@ -173,7 +174,8 @@ export default function Habitos(){
     
     return(
         <Tela>
-            <Topo />
+        <GlobalStyle/>
+        <Topo />    
             <ContainerTopo>
                 <h1>Meus hábitos</h1>
                 <Botao onClick={() => setAdicionar(true)}>
@@ -182,7 +184,7 @@ export default function Habitos(){
             </ContainerTopo>
             <CriacaoHabito adicionar={adicionar} setAdicionar={setAdicionar} setHabitos={setHabitos}/>
             <RenderizarHabitos habitos={habitos} setHabitos={setHabitos}/>
-            <Menu />
+        <Menu />
         </Tela>
     )
 }
@@ -205,6 +207,8 @@ const ContainerTopo = styled.div`
 `;
 
 const Tela = styled.div`
+    display: flex;
+    flex-direction: column;
     background-color: #E5E5E5;
     width: 100%;
     height: 100vh;
@@ -336,3 +340,15 @@ const BotaoReal = styled.div`
             font-size: 16px;
         }
 `;
+
+const Ultimo = styled.div `
+    :last-child{
+        margin-bottom: 80px;
+    }
+`;
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #E5E5E5;
+  }
+`

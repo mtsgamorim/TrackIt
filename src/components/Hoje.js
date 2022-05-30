@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import dayjs from "dayjs";
 import axios from "axios";
+import { createGlobalStyle } from 'styled-components'
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 
@@ -9,7 +10,7 @@ import Menu from "./Menu";
 
 
 function Habito({habito, setHabitosDia}) {
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { usuario } = useContext(UserContext);
     const [mudaCor, setMudaCor] = useState(false);
     const [mudaCor2, setMudaCor2] = useState(false);
     const config = {
@@ -45,10 +46,10 @@ function Habito({habito, setHabitosDia}) {
     
     return(
         <Flex>
-            <Container mudaCor={mudaCor} mudaCor2={mudaCor2}>
+            <Container>
                 <h4>{habito.name}</h4>
-                <p>Sequência atual: <span>{habito.currentSequence} dias</span></p>
-                <p>Seu recorde: <h6>{habito.highestSequence} dias</h6></p>
+                <Sequencia mudaCor={mudaCor}><p>Sequência atual: <span>{habito.currentSequence} dias</span></p></Sequencia>
+                <Record mudaCor2={mudaCor2}><p>Seu recorde: <span>{habito.highestSequence} dias</span></p></Record>
             </Container>
             <Button onClick={check} habito={habito}>
                 <ion-icon name="checkmark-outline"></ion-icon>
@@ -58,12 +59,10 @@ function Habito({habito, setHabitosDia}) {
 }
 
 export default function Hoje(){
-    console.log(dayjs().format('d'))
     let diaSemana = "";
     let percentage = 0;
     let data = dayjs().format('DD/MM');
-    const [habitosConcluidos, setHabitosConcluidos] = useState(0);
-    const { usuario, setUsuario, habitosDia, setHabitosDia } = useContext(UserContext);
+    const { usuario, habitosDia, setHabitosDia } = useContext(UserContext);
     const config = {
         headers: {
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
@@ -77,19 +76,19 @@ export default function Hoje(){
     }
     percentage = soma * 100 / habitosDia.length;
     
-    if(dayjs().format('d') == 0) {
+    if(dayjs().format('d') === 0) {
         diaSemana = "Domingo";
-    }else if (dayjs().format('d') == 1){
+    }else if (dayjs().format('d') === "1"){
         diaSemana = "Segunda";
-    }else if (dayjs().format('d') == 2){
+    }else if (dayjs().format('d') === "2"){
         diaSemana = "Terça";
-    }else if (dayjs().format('d') == 3){
+    }else if (dayjs().format('d') === "3"){
         diaSemana = "Quarta";
-    }else if (dayjs().format('d') == 4){
+    }else if (dayjs().format('d') === "4"){
         diaSemana = "Quinta";
-    }else if (dayjs().format('d') == 5){
+    }else if (dayjs().format('d') === "5"){
         diaSemana = "Sexta";
-    }else if (dayjs().format('d') == 6){
+    }else if (dayjs().format('d') === "6"){
         diaSemana = "Sabado";
     }
 
@@ -97,16 +96,18 @@ export default function Hoje(){
         const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
         promise.then(resposta => {
             setHabitosDia(resposta.data);
-            console.log(resposta.data);
         })
     }, []);
 
     return(
     <Tela>
+        <GlobalStyle/>
         <Topo />
             <h1>{diaSemana}, {data}</h1>
-            {percentage === 0 || isNaN(percentage) ? <h2>Nenhum hábito concluído ainda</h2> : <h3>{percentage.toFixed(2)}% dos hábitos concluídos</h3>}
+            {percentage === 0 || isNaN(percentage) ? <h2>Nenhum hábito concluído ainda</h2> : <h3>{percentage.toFixed(0)}% dos hábitos concluídos</h3>}
+            <Ultimo>
             {habitosDia.map((habito, index) => <Habito key={index} habito={habito} setHabitosDia={setHabitosDia} />)}
+            </Ultimo>
         
         <Menu />
     </Tela>
@@ -156,15 +157,7 @@ const Container = styled.div`
         font-size: 20px;
         margin-left: 10px;
     }
-    h6 {
-        font-family: 'Lexend Deca';
-        font-weight: 400;
-        font-size: 13px;
-        color: ${(props) => props.mudaCor2 ? "#8FC549" : "#666666"};
-        margin-left: 10px;
-        display:inline;
-        margin-left: 0px;
-    }
+    
     p {
         font-family: 'Lexend Deca';
         font-weight: 400;
@@ -187,6 +180,9 @@ const Flex = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    :last-child{
+        margin-bottom: 100px;
+    }
 `;
 
 const Button = styled.div`
@@ -205,3 +201,45 @@ const Button = styled.div`
         color: #FFFFFF;
     }
 `;
+
+const Ultimo = styled.div`
+    :last-child{
+        margin-bottom: 80px;
+    }
+`;
+
+const Sequencia = styled.div`
+    margin-left: 10px;
+    p{
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 13px;
+        color: "#666666";
+        margin-left: 10px;
+        margin-left: 0px;
+    }
+    span {
+        color: ${(props) => props.mudaCor ? "#8FC549" : "#666666"};
+    }
+`;
+
+const Record = styled.div`
+    margin-left: 10px;
+    p{
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 13px;
+        color: "#666666";
+        margin-left: 10px;
+        margin-left: 0px;
+    }
+    span {
+        color: ${(props) => props.mudaCor2 ? "#8FC549" : "#666666"};
+    }
+    
+`;
+const GlobalStyle = createGlobalStyle`
+  body {
+    background-color: #E5E5E5;
+  }
+`
