@@ -81,6 +81,7 @@ function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
             const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
             promise.then(resposta => {
             setHabitos(resposta.data);
+            setCriarHabito("");
         })
         });
         promise.catch((err)=> alert("Erro no envio"));
@@ -155,6 +156,7 @@ export default function Habitos(){
             setHabitos(resposta.data);
         })
     }, []);
+
 
     
     return(

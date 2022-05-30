@@ -70,7 +70,7 @@ const Botao = styled.div`
         font-weight: 400;
         font-size: 18px;
         position: absolute;
-        color: #FFFFFF;
+        color: #FFFFFF !important;
         right: 25px;  
     }
 

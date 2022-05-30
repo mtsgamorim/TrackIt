@@ -20,7 +20,7 @@ function BotaoSemana({name, day, habito}){
 export default function MeuHabito({habito, setHabitos}){
     const [abrirConfirmacao, setAbrirConfirmacao] = useState(false);
     const { usuario, setUsuario } = useContext(UserContext);
-    console.log(usuario);
+   
     
     function confirma(){
         setAbrirConfirmacao(true);
@@ -44,7 +44,7 @@ export default function MeuHabito({habito, setHabitos}){
     function cancelar(){
         setAbrirConfirmacao(false);
     }
-    console.log(habito);
+   
     const BotoesSemana = [
         {
             name: "D" ,
