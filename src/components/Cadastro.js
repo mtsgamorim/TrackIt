@@ -1,7 +1,7 @@
 import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ThreeDots } from 'react-loader-spinner'
 
 import logo from "../assents/logo.png"
@@ -34,6 +34,12 @@ export default function Cadastro() {
             alert("Problema na criação");
             setAnimation(false);
         })
+    }
+
+    function redirecionar(){
+        if(!animation){
+            navigate("/");
+        }
     }
     return (
         <Container>
@@ -96,9 +102,9 @@ export default function Cadastro() {
                 {animation ? <Desativa><ThreeDots color="#00BFFF" height={80} width={80} /></Desativa> : <button type="submit"><span>Cadastrar</span></button>}
                 
             </form>
-            <Link to="/">
+            <div onClick={redirecionar}>
                 <p>Já tem uma conta? Faça login!</p>
-            </Link>
+            </div>
         </Container>
     )
 }

@@ -11,6 +11,7 @@ import Menu from "./Menu";
 function Habito({habito, setHabitosDia}) {
     const { usuario, setUsuario } = useContext(UserContext);
     const [mudaCor, setMudaCor] = useState(false);
+    const [mudaCor2, setMudaCor2] = useState(false);
     const config = {
         headers: {
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
@@ -21,6 +22,9 @@ function Habito({habito, setHabitosDia}) {
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/check`, {}, config);
             promise.then(res => {
                 setMudaCor(true);
+                if(habito.currentSequence === habito.highestSequence){
+                    setMudaCor2(true);
+                }
                 const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
                 promise.then(resposta => {
                     setHabitosDia(resposta.data);
@@ -29,6 +33,7 @@ function Habito({habito, setHabitosDia}) {
         }else{
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/uncheck`, {}, config);
             setMudaCor(false);
+            setMudaCor2(false);
             promise.then(res => {
                 const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
                 promise.then(resposta => {
@@ -40,10 +45,10 @@ function Habito({habito, setHabitosDia}) {
     
     return(
         <Flex>
-            <Container mudaCor={mudaCor}>
+            <Container mudaCor={mudaCor} mudaCor2={mudaCor2}>
                 <h4>{habito.name}</h4>
                 <p>Sequência atual: <span>{habito.currentSequence} dias</span></p>
-                <p>Seu recorde: <span>{habito.highestSequence} dias</span></p>
+                <p>Seu recorde: <h6>{habito.highestSequence} dias</h6></p>
             </Container>
             <Button onClick={check} habito={habito}>
                 <ion-icon name="checkmark-outline"></ion-icon>
@@ -150,6 +155,15 @@ const Container = styled.div`
         font-weight: 400;
         font-size: 20px;
         margin-left: 10px;
+    }
+    h6 {
+        font-family: 'Lexend Deca';
+        font-weight: 400;
+        font-size: 13px;
+        color: ${(props) => props.mudaCor2 ? "#8FC549" : "#666666"};
+        margin-left: 10px;
+        display:inline;
+        margin-left: 0px;
     }
     p {
         font-family: 'Lexend Deca';

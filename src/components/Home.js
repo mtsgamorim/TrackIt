@@ -1,7 +1,7 @@
 import axios from "axios"
 import styled from "styled-components"
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import UserContext from "../contexts/UserContext"
 import { ThreeDots } from  'react-loader-spinner'
@@ -31,9 +31,15 @@ export default function Home(){
         })
 
         promise.catch((err) => {
-            alert("Falha");
+            alert("Falha ao logar, digite os dados corretamente");
             setAnimation(false);
         })
+    }
+
+    function redirecionar() {
+        if(!animation){
+            navigate("/cadastro");
+        }
     }
         
 
@@ -70,9 +76,9 @@ export default function Home(){
                 
                 {animation ? <Desativa><ThreeDots color="#00BFFF" height={80} width={80} /></Desativa> : <button type="submit"><span>Entrar</span></button>}
             </form>
-            <Link to="/cadastro">
+            <div onClick={redirecionar}>
                 <p>Não tem uma conta? Cadastre-se!</p>
-            </Link>
+            </div>
         </Container>
     )
 }

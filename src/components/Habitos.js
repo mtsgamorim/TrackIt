@@ -90,7 +90,7 @@ function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
                         setCriarHabito("");
                     })
                 });
-                promise.catch((err) => alert("Erro no envio"));
+                promise.catch((err) => alert(`Erro no envio: ${err.message}`));
             }else {
                 alert("Alguns dados não foram preenchidos");
             }
