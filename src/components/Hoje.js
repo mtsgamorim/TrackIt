@@ -40,8 +40,8 @@ function Habito({habito, setHabitosDia}) {
         <Flex>
             <Container>
                 <h4>{habito.name}</h4>
-                <p>Sequência atual: 3 dias</p>
-                <p>Seu recorde: 5 dias</p>
+                <p>Sequência atual: {habito.currentSequence} dias</p>
+                <p>Seu recorde: {habito.highestSequence} dias</p>
             </Container>
             <Button onClick={check} habito={habito}>
                 <ion-icon name="checkmark-outline"></ion-icon>
