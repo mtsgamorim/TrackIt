@@ -1,10 +1,21 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 
 export default function Menu() {
-    const percentage = 20;
+    let percentage = 0;
+    const { habitosDia } = useContext(UserContext);
+    let soma = 0;
+    for(let i = 0; i < habitosDia.length; i++){
+        if(habitosDia[i].done){
+            soma = soma + 1
+        }
+    }
+    percentage = soma * 100 / habitosDia.length;
+
 
 
     return(

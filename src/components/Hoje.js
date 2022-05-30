@@ -55,8 +55,7 @@ export default function Hoje(){
     let diaSemana = "";
     let data = dayjs().format('DD/MM');
     const [habitosConcluidos, setHabitosConcluidos] = useState(0);
-    const [habitosDia, setHabitosDia] = useState([]);
-    const { usuario, setUsuario } = useContext(UserContext);
+    const { usuario, setUsuario, habitosDia, setHabitosDia } = useContext(UserContext);
     const config = {
         headers: {
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)

@@ -11,7 +11,8 @@ import Historico from "./Historico"
 
 export default function App() {
     const [usuario, setUsuario] = useState({});
-    const contextValue = { usuario, setUsuario };
+    const [habitosDia, setHabitosDia] = useState([]);
+    const contextValue = { usuario, setUsuario, habitosDia, setHabitosDia };
     return (
         <UserContext.Provider value={contextValue} >
             <BrowserRouter>
