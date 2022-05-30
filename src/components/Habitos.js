@@ -2,25 +2,28 @@ import styled from "styled-components"
 import axios from "axios"
 import { useState, useContext, useEffect } from "react"
 import UserContext from "../contexts/UserContext"
+import { ThreeDots } from 'react-loader-spinner';
 
 import Topo from "./Topo"
 import Menu from "./Menu"
 import MeuHabito from "./MeuHabito"
 
 
-function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado}){
+function BotaoSemana({name, day, diasSelecionado, setDiasSelecionado, travarInput}){
     const [selecionei, setSelecionei] = useState(false);
-    function marcaDia(){
-        let aux = [...diasSelecionado]
-        if(!selecionei){
-            setSelecionei(true);
-            aux.push(day);
-            setDiasSelecionado(aux);
-        }else{
-            setSelecionei(false);
-            aux = aux.filter((f) => f !== day);
-            setDiasSelecionado(aux);
-        }
+    function marcaDia() {
+        if (!travarInput) {
+            let aux = [...diasSelecionado]
+            if (!selecionei) {
+                setSelecionei(true);
+                aux.push(day);
+                setDiasSelecionado(aux);
+            } else {
+                setSelecionei(false);
+                aux = aux.filter((f) => f !== day);
+                setDiasSelecionado(aux);
+            }
+        } 
     }
     return(
         <SelecionarSemana onClick={marcaDia} selecionei={selecionei}>
@@ -70,22 +73,33 @@ function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
         }
     ]
     function enviar(){
-        setTravarInput(true);
-        const envio = {
-            "name": criarHabito,
-            "days": diasSelecionado
+        if(!travarInput){
+            if (criarHabito !== "" && diasSelecionado.length !== 0) {
+                setTravarInput(true);
+                const envio = {
+                    "name": criarHabito,
+                    "days": diasSelecionado
+                }
+                const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", envio, config);
+                promise.then((res) => {
+                    setTravarInput(false)
+                    setAdicionar(false);
+                    const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
+                    promise.then(resposta => {
+                        setHabitos(resposta.data);
+                        setCriarHabito("");
+                    })
+                });
+                promise.catch((err) => alert("Erro no envio"));
+            }else {
+                alert("Alguns dados não foram preenchidos");
+            }
         }
-        const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", envio, config);
-        promise.then((res) => {setTravarInput(false)
+    }
+    function voltar(){
+        if(!travarInput){
             setAdicionar(false);
-            const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
-            promise.then(resposta => {
-            setHabitos(resposta.data);
-            setCriarHabito("");
-        })
-        });
-        promise.catch((err)=> alert("Erro no envio"));
-
+        }
     }
     if(adicionar){
         return(
@@ -104,13 +118,11 @@ function CriacaoHabito({adicionar, setAdicionar, setHabitos}){
                     
                 </AreaCriar>
                 <WeekButtons>
-                    {BotoesSemana.map((semana, index) => <BotaoSemana key={index} name={semana.name} day={semana.day} diasSelecionado={diasSelecionado} setDiasSelecionado={setDiasSelecionado} />)}
+                    {BotoesSemana.map((semana, index) => <BotaoSemana key={index} name={semana.name} day={semana.day} diasSelecionado={diasSelecionado} setDiasSelecionado={setDiasSelecionado} travarInput={travarInput}/>)}
                 </WeekButtons>
                 <AreaSalvar>
-                <div onClick={enviar}>
-                    <span>Salvar</span>
-                </div>
-                <h4 onClick={()=>setAdicionar(false)}>Cancelar</h4>
+                {travarInput ? <BotaoFake><ThreeDots color="#00BFFF" height={80} width={80} /></BotaoFake> : <BotaoReal onClick={enviar}><span>Salvar</span></BotaoReal>}
+                <h4 onClick={voltar}>Cancelar</h4>
                 </AreaSalvar>
             </Engloba>
         )
@@ -293,8 +305,22 @@ const AreaSalvar = styled.div`
         margin-right: 30px;
         margin-top: 20px;
     }
-    div {
-        width: 84px;
+`;
+
+const BotaoFake = styled.div`
+    width: 84px;
+        height: 35px;
+        background: #52B6FF;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        margin-right: 20px;
+`;
+
+const BotaoReal = styled.div`
+    width: 84px;
         height: 35px;
         background: #52B6FF;
         border-radius: 5px;
@@ -309,5 +335,4 @@ const AreaSalvar = styled.div`
             font-weight: 400;
             font-size: 16px;
         }
-    }
 `;

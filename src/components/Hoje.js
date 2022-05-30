@@ -9,8 +9,8 @@ import Menu from "./Menu";
 
 
 function Habito({habito, setHabitosDia}) {
-    console.log(habito);
     const { usuario, setUsuario } = useContext(UserContext);
+    const [mudaCor, setMudaCor] = useState(false);
     const config = {
         headers: {
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
@@ -20,6 +20,7 @@ function Habito({habito, setHabitosDia}) {
         if (habito.done === false) {
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/check`, {}, config);
             promise.then(res => {
+                setMudaCor(true);
                 const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
                 promise.then(resposta => {
                     setHabitosDia(resposta.data);
@@ -27,6 +28,7 @@ function Habito({habito, setHabitosDia}) {
             })
         }else{
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habito.id}/uncheck`, {}, config);
+            setMudaCor(false);
             promise.then(res => {
                 const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
                 promise.then(resposta => {
@@ -38,10 +40,10 @@ function Habito({habito, setHabitosDia}) {
     
     return(
         <Flex>
-            <Container>
+            <Container mudaCor={mudaCor}>
                 <h4>{habito.name}</h4>
-                <p>Sequência atual: {habito.currentSequence} dias</p>
-                <p>Seu recorde: {habito.highestSequence} dias</p>
+                <p>Sequência atual: <span>{habito.currentSequence} dias</span></p>
+                <p>Seu recorde: <span>{habito.highestSequence} dias</span></p>
             </Container>
             <Button onClick={check} habito={habito}>
                 <ion-icon name="checkmark-outline"></ion-icon>
@@ -53,6 +55,7 @@ function Habito({habito, setHabitosDia}) {
 export default function Hoje(){
     console.log(dayjs().format('d'))
     let diaSemana = "";
+    let percentage = 0;
     let data = dayjs().format('DD/MM');
     const [habitosConcluidos, setHabitosConcluidos] = useState(0);
     const { usuario, setUsuario, habitosDia, setHabitosDia } = useContext(UserContext);
@@ -61,6 +64,14 @@ export default function Hoje(){
             "Authorization": `Bearer ${usuario.token}` //Padrão da API (Bearer Authentication)
         }
     }
+    let soma = 0;
+    for(let i = 0; i < habitosDia.length; i++){
+        if(habitosDia[i].done){
+            soma = soma + 1
+        }
+    }
+    percentage = soma * 100 / habitosDia.length;
+    
     if(dayjs().format('d') == 0) {
         diaSemana = "Domingo";
     }else if (dayjs().format('d') == 1){
@@ -89,7 +100,7 @@ export default function Hoje(){
     <Tela>
         <Topo />
             <h1>{diaSemana}, {data}</h1>
-            {habitosConcluidos === 0 ? <h2>Nenhum hábito concluído ainda</h2> : <h3>67% dos hábitos concluídos</h3>}
+            {percentage === 0 || isNaN(percentage) ? <h2>Nenhum hábito concluído ainda</h2> : <h3>{percentage.toFixed(2)}% dos hábitos concluídos</h3>}
             {habitosDia.map((habito, index) => <Habito key={index} habito={habito} setHabitosDia={setHabitosDia} />)}
         
         <Menu />
@@ -127,6 +138,7 @@ const Tela = styled.div`
         font-weight: 400;
         font-size: 18px;
         margin-left: 15px;
+        margin-top: 5px;
     }
 `;
 
@@ -145,6 +157,9 @@ const Container = styled.div`
         font-size: 13px;
         color: #666666;
         margin-left: 10px;
+    }
+    span{
+        color: ${(props) => props.mudaCor ? "#8FC549" : "#666666"};
     }
 `;
 
