@@ -2,7 +2,6 @@
 
 <p align = "center">
    <img src="https://img.shields.io/badge/author-Matheus_Amorim-4dae71?style=flat-square" />
-   <img src="https://img.shields.io/github/languages/count/mtsgamorim/TrackIt?color=4dae71&style=flat-square" />
 </p>
 
 ## :clipboard: Descrição
@@ -43,7 +42,7 @@ Depois, dentro da pasta, rode o seguinte comando para instalar as dependencias.
 npm install
 ```
 
-Finalizado o processo, é só inicializar o servidor
+Finalizado o processo, é só inicializar o projeto
 
 ```
 npm start
